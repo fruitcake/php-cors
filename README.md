@@ -67,28 +67,6 @@ $cors->isCorsRequest(Request $request);
 $cors->isPreflightRequest(Request $request);
 ```
 
-## Example: using the stack middleware
-
-```php
-<?php
-
-use Fruitcake\Cors\Cors;
-
-$app = new Cors($app, [
-    // you can use ['*'] to allow any headers
-    'allowedHeaders'      => ['x-allowed-header', 'x-other-allowed-header'],
-    // you can use ['*'] to allow any methods
-    'allowedMethods'      => ['DELETE', 'GET', 'POST', 'PUT'],
-    // you can use ['*'] to allow requests from any origin
-    'allowedOrigins'      => ['localhost'],
-    // you can enter regexes that are matched to the origin request header
-    'allowedOriginsPatterns' => ['/localhost:\d/'],
-    'exposedHeaders'      => false,
-    'maxAge'              => false,
-    'supportsCredentials' => false,
-]);
-```
-
 ## License
 
 Released under the MIT License, see [LICENSE](LICENSE).
