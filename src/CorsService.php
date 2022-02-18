@@ -39,8 +39,8 @@ class CorsService
         // Normalize underscores
         foreach ($aliases as $alias => $option) {
             if (isset($options[$alias])) {
-                $options[$option] = $options['alias'];
-                unset($options['alias']);
+                $options[$option] = $options[$alias];
+                unset($options[$alias]);
             }
         }
 
