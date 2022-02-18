@@ -26,6 +26,24 @@ class CorsService
 
     private function normalizeOptions(array $options = []): array
     {
+        $aliases = [
+            'supports_credentials' => 'supportsCredentials',
+            'allowed_origins' => 'allowedOrigins',
+            'allowed_origins_patterns' => 'allowedOriginsPatterns',
+            'allowed_headers' => 'allowedHeaders',
+            'allowed_methods' => 'allowedMethods',
+            'exposed_headers' => 'exposedHeaders',
+            'max_age'  => 'maxAge',
+        ];
+
+        // Normalize underscores
+        foreach ($aliases as $alias => $option) {
+            if (isset($options[$alias])) {
+                $options[$option] = $options['alias'];
+                unset($options['alias']);
+            }
+        }
+
         $options += [
             'allowedOrigins' => [],
             'allowedOriginsPatterns' => [],
@@ -35,6 +53,16 @@ class CorsService
             'allowedMethods' => [],
             'maxAge' => 0,
         ];
+
+        if (!is_array($options['exposedHeaders'])) {
+            throw new \RuntimeException("CORS option `exposed_headers` should be `false` or an array");
+        }
+
+        foreach (['allowedOrigins', 'allowedOriginsPatterns',  'allowedHeaders', 'allowedMethods'] as $key) {
+            if (!is_array($options[$key])) {
+                throw new \RuntimeException("CORS option `{$key}` should be an array");
+            }
+        }
 
         // normalize array('*') to true
         if (in_array('*', $options['allowedOrigins'])) {
@@ -52,15 +80,33 @@ class CorsService
             $options['allowedMethods'] = array_map('strtoupper', $options['allowedMethods']);
         }
 
+        // Transform wildcard pattern
+        foreach ($options['allowedOrigins'] as $origin) {
+            if (strpos($origin, '*') !== false) {
+                $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
+            }
+        }
+
         return $options;
     }
 
     /**
-     * @deprecated use isOriginAllowed
+     * Create a pattern for a wildcard, based on Str::is() from Laravel
+     *
+     * @see https://github.com/laravel/framework/blob/5.5/src/Illuminate/Support/Str.php
+     * @param string $pattern
+     * @return string
      */
-    public function isActualRequestAllowed(Request $request): bool
+    private function convertWildcardToPattern($pattern)
     {
-        return $this->isOriginAllowed($request);
+        $pattern = preg_quote($pattern, '#');
+
+        // Asterisks are translated into zero-or-more regular expression wildcards
+        // to make it convenient to check if the strings starts with the given
+        // pattern such as "library/*", making any string check convenient.
+        $pattern = str_replace('\*', '.*', $pattern);
+
+        return '#^' . $pattern . '\z#u';
     }
 
     public function isCorsRequest(Request $request): bool
@@ -217,10 +263,5 @@ class CorsService
         }
 
         return $response;
-    }
-
-    private function isSameHost(Request $request): bool
-    {
-        return $request->headers->get('Origin') === $request->getSchemeAndHttpHost();
     }
 }
