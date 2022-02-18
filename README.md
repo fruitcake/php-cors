@@ -57,7 +57,7 @@ $cors = new CorsService([
     'allowedMethods'         => ['DELETE', 'GET', 'POST', 'PUT'],
     'allowedOrigins'         => ['http://localhost'],
     'allowedOriginsPatterns' => ['/localhost:\d/', 'https://*.example.com'],
-    'exposedHeaders'         => false,
+    'exposedHeaders'         => ['Content-Encoding'],
     'maxAge'                 => false,
     'supportsCredentials'    => false,
 ]);
