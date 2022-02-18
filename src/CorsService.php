@@ -64,6 +64,13 @@ class CorsService
             }
         }
 
+        // Transform wildcard pattern
+        foreach ($options['allowedOrigins'] as $origin) {
+            if (strpos($origin, '*') !== false) {
+                $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
+            }
+        }
+
         // normalize array('*') to true
         if (in_array('*', $options['allowedOrigins'])) {
             $options['allowedOrigins'] = true;
@@ -78,13 +85,6 @@ class CorsService
             $options['allowedMethods'] = true;
         } else {
             $options['allowedMethods'] = array_map('strtoupper', $options['allowedMethods']);
-        }
-
-        // Transform wildcard pattern
-        foreach ($options['allowedOrigins'] as $origin) {
-            if (strpos($origin, '*') !== false) {
-                $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
-            }
         }
 
         return $options;
