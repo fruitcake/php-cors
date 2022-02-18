@@ -54,8 +54,8 @@ class CorsService
             'maxAge' => 0,
         ];
 
-        if (!is_array($options['exposedHeaders'])) {
-            throw new \RuntimeException("CORS option `exposed_headers` should be `false` or an array");
+        if ($options['exposedHeaders'] && !is_array($options['exposedHeaders'])) {
+            throw new \RuntimeException("CORS option `exposedHeaders` should be `false` or an array");
         }
 
         foreach (['allowedOrigins', 'allowedOriginsPatterns',  'allowedHeaders', 'allowedMethods'] as $key) {
