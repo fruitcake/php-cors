@@ -1,6 +1,6 @@
 # Stack/Cors
 
-[![Tests](https://github.com/fruitcake/php-cors/actions/workflows/Unit%20Tests/badge.svg)](https://github.com/fruitcake/php-cors/actions)
+[![Unit Tests](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fruitcake/php-cors/actions)
 [![Packagist License](https://poser.pugx.org/fruitcake/php-cors/license.png)](http://choosealicense.com/licenses/mit/)
 [![Latest Stable Version](https://poser.pugx.org/fruitcake/php-cors/version.png)](https://packagist.org/packages/fruitcake/php-cors)
 [![Total Downloads](https://poser.pugx.org/fruitcake/php-cors/d/total.png)](https://packagist.org/packages/fruitcake/php-cors)
