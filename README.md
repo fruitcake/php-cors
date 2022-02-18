@@ -1,5 +1,4 @@
 # Stack/Cors
-## Stand-alone fork of https://github.com/asm89/stack-cors
 
 [![Tests](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml)
 [![Packagist License](https://poser.pugx.org/fruitcake/php-corsr/license.png)](http://choosealicense.com/licenses/mit/)
@@ -13,8 +12,7 @@ http-{foundation,kernel} using application. It attempts to implement the
 
 [W3C Recommendation]: http://www.w3.org/TR/cors/
 
-Build status: ![.github/workflows/run-tests.yml](https://github.com/asm89/stack-cors/workflows/.github/workflows/run-tests.yml/badge.svg)
-
+> Note: This is a standalone fork of https://github.com/asm89/stack-cors
 ## Installation
 
 Require `fruitcake/php-cors` using composer.
