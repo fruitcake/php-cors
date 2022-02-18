@@ -39,9 +39,11 @@ This package can be used as a library. You can use it in your framework using:
 
 The _allowedMethods_ and _allowedHeaders_ options are case-insensitive.
 
-You don't need to provide both _allowedOrigins_ and _allowedOriginsPatterns_. If one of the strings passed matches, it is considered a valid origin.
+You don't need to provide both _allowedOrigins_ and _allowedOriginsPatterns_. If one of the strings passed matches, it is considered a valid origin. A wildcard in allowedOrigins will be converted to a pattern.
 
 If `['*']` is provided to _allowedMethods_, _allowedOrigins_ or _allowedHeaders_ all methods / origins / headers are allowed.
+
+> Note: Allowing a single static origin will improve cacheability.
 
 ### Example: using the library
 
@@ -54,7 +56,7 @@ $cors = new CorsService([
     'allowedHeaders'         => ['x-allowed-header', 'x-other-allowed-header'],
     'allowedMethods'         => ['DELETE', 'GET', 'POST', 'PUT'],
     'allowedOrigins'         => ['http://localhost'],
-    'allowedOriginsPatterns' => ['/localhost:\d/'],
+    'allowedOriginsPatterns' => ['/localhost:\d/', 'https://*.example.com'],
     'exposedHeaders'         => false,
     'maxAge'                 => false,
     'supportsCredentials'    => false,

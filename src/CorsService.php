@@ -104,7 +104,7 @@ class CorsService
 
         // Asterisks are translated into zero-or-more regular expression wildcards
         // to make it convenient to check if the strings starts with the given
-        // pattern such as "library/*", making any string check convenient.
+        // pattern such as "*.example.com", making any string check convenient.
         $pattern = str_replace('\*', '.*', $pattern);
 
         return '#^' . $pattern . '\z#u';
