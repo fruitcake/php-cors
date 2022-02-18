@@ -12,6 +12,7 @@
 
 namespace Fruitcake\Cors;
 
+use Fruitcake\Cors\Exceptions\InvalidOptionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -55,12 +56,12 @@ class CorsService
         ];
 
         if ($options['exposedHeaders'] && !is_array($options['exposedHeaders'])) {
-            throw new \RuntimeException("CORS option `exposedHeaders` should be `false` or an array");
+            throw new InvalidOptionException("CORS option `exposedHeaders` should be `false` or an array");
         }
 
         foreach (['allowedOrigins', 'allowedOriginsPatterns',  'allowedHeaders', 'allowedMethods'] as $key) {
             if (!is_array($options[$key])) {
-                throw new \RuntimeException("CORS option `{$key}` should be an array");
+                throw new InvalidOptionException("CORS option `{$key}` should be an array");
             }
         }
 
