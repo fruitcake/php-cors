@@ -555,7 +555,7 @@ class CorsTest extends TestCase
 
     /**
      * @param CorsInputOptions $options
-     * @param array<string, string> $responseHeaders
+     * @param string[] $responseHeaders
      * @return MockApp
      */
     private function createStackedApp(array $options = array(), array $responseHeaders = array()): MockApp
