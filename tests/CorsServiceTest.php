@@ -57,6 +57,15 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
+    public function itNormalizesFalseExposedHeaders(): void
+    {
+        $service = new CorsService(['exposedHeaders' => false]);
+        $this->assertEquals([], $this->getOptionsFromService($service)['exposedHeaders']);
+    }
+
+    /**
+     * @test
+     */
     public function itThrowsExceptionOnInvalidExposedHeaders(): void
     {
         $this->expectException(InvalidOptionException::class);
