@@ -74,5 +74,5 @@ $cors->isPreflightRequest(Request $request);
 ## License
 
 Released under the MIT License, see [LICENSE](LICENSE).
-The original author of this Library is Alexander <iam.asm89@gmail.com>, while Barry <barryvdh@gmail.com> has been involved since 2015.
-This package is split-off from https://github.com/asm89/stack-cors
+
+> This package is split-off from https://github.com/asm89/stack-cors and developed as stand-alone library since 2022
