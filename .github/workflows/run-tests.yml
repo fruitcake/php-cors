@@ -35,6 +35,7 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         extensions: mbstring
+        coverage: pcov
 
     - name: Install dependencies
       run: |
