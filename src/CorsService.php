@@ -23,14 +23,14 @@ use Symfony\Component\HttpFoundation\Response;
  *  'supportsCredentials'?: bool,
  *  'allowedHeaders'?: string[],
  *  'allowedMethods'?: string[],
- *  'exposedHeaders'?: string[],
+ *  'exposedHeaders'?: string[]|false,
  *  'maxAge'?: int|bool|null,
  *  'allowed_origins'?: string[],
  *  'allowed_origins_patterns'?: string[],
  *  'supports_credentials'?: bool,
  *  'allowed_headers'?: string[],
  *  'allowed_methods'?: string[],
- *  'exposed_headers'?: string[],
+ *  'exposed_headers'?: string[]|false,
  *  'max_age'?: int|bool|null
  * }
  *
@@ -63,33 +63,17 @@ class CorsService
      */
     private function normalizeOptions(array $options = []): array
     {
-        $aliases = [
-            'supports_credentials' => 'supportsCredentials',
-            'allowed_origins' => 'allowedOrigins',
-            'allowed_origins_patterns' => 'allowedOriginsPatterns',
-            'allowed_headers' => 'allowedHeaders',
-            'allowed_methods' => 'allowedMethods',
-            'exposed_headers' => 'exposedHeaders',
-            'max_age'  => 'maxAge',
-        ];
+        $options['allowedOrigins'] = $options['allowedOrigins'] ?? $options['allowed_origins'] ?? [];
+        $options['allowedOriginsPatterns'] =
+            $options['allowedOriginsPatterns'] ?? $options['allowed_origins_patterns'] ?? [];
+        $options['allowedMethods'] = $options['allowedMethods'] ?? $options['allowed_methods'] ?? [];
+        $options['allowedHeaders'] = $options['allowedHeaders'] ?? $options['allowed_headers'] ?? [];
+        $options['exposedHeaders'] = $options['exposedHeaders'] ?? $options['exposed_headers'] ?? [];
+        $options['supportsCredentials'] = $options['supportsCredentials'] ?? $options['supports_credentials'] ?? false;
 
-        // Normalize underscores
-        foreach ($aliases as $alias => $option) {
-            if (isset($options[$alias])) {
-                $options[$option] = $options[$alias];
-                unset($options[$alias]);
-            }
+        if (!array_key_exists('maxAge', $options)) {
+            $options['maxAge'] = array_key_exists('max_age', $options) ? $options['max_age'] : 0;
         }
-
-        $options += [
-            'allowedOrigins' => [],
-            'allowedOriginsPatterns' => [],
-            'supportsCredentials' => false,
-            'allowedHeaders' => [],
-            'exposedHeaders' => [],
-            'allowedMethods' => [],
-            'maxAge' => 0,
-        ];
 
         if ($options['exposedHeaders'] === false) {
             $options['exposedHeaders'] = [];
@@ -234,6 +218,7 @@ class CorsService
             $response->headers->set('Access-Control-Allow-Origin', '*');
         } elseif ($this->isSingleOriginAllowed()) {
             // Single origins can be safely set
+            /** @phpstan-ignore-next-line */
             $response->headers->set('Access-Control-Allow-Origin', array_values($this->options['allowedOrigins'])[0]);
         } else {
             // For dynamic headers, set the requested Origin header when set and allowed
@@ -260,6 +245,7 @@ class CorsService
             $allowMethods = strtoupper($request->headers->get('Access-Control-Request-Method'));
             $this->varyHeader($response, 'Access-Control-Request-Method');
         } else {
+            /** @phpstan-ignore-next-line */
             $allowMethods = implode(', ', $this->options['allowedMethods']);
         }
 
@@ -272,6 +258,7 @@ class CorsService
             $allowHeaders = $request->headers->get('Access-Control-Request-Headers');
             $this->varyHeader($response, 'Access-Control-Request-Headers');
         } else {
+            /** @phpstan-ignore-next-line */
             $allowHeaders = implode(', ', $this->options['allowedHeaders']);
         }
         $response->headers->set('Access-Control-Allow-Headers', $allowHeaders);
