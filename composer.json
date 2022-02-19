@@ -32,7 +32,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "analyse": "phpstan analyse src tests --level=6",
+        "analyse": "phpstan analyse src tests --level=7",
         "check-style": "phpcs -p --standard=PSR12 --exclude=Generic.Files.LineLength --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
         "fix-style": "phpcbf -p --standard=PSR12 --exclude=Generic.Files.LineLength --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests"
     },

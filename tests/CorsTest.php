@@ -555,23 +555,15 @@ class CorsTest extends TestCase
 
     /**
      * @param CorsInputOptions $options
-     * @param array{'Vary'?: string} $responseHeaders
+     * @param string[] $responseHeaders
      * @return MockApp
      */
     private function createStackedApp(array $options = array(), array $responseHeaders = array()): MockApp
     {
-        $passedOptions = array_merge(
-            array(
-                'allowedHeaders'      => array('x-allowed-header', 'x-other-allowed-header'),
-                'allowedMethods'      => array('delete', 'get', 'post', 'put'),
-                'allowedOrigins'      => array('http://localhost'),
-                'exposedHeaders'      => false,
-                'maxAge'              => false,
-                'supportsCredentials' => false,
-            ),
-            $options
-        );
+        $options['allowedHeaders'] = $options['allowedHeaders'] ?? ['x-allowed-header', 'x-other-allowed-header'];
+        $options['allowedMethods'] = $options['allowedMethods'] ?? ['delete', 'get', 'post', 'put'];
+        $options['allowedOrigins'] = $options['allowedOrigins'] ?? ['http://localhost'];
 
-        return new MockApp($responseHeaders, $passedOptions);
+        return new MockApp($responseHeaders, $options);
     }
 }
