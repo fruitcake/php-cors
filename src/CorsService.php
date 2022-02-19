@@ -181,11 +181,14 @@ class CorsService
 
         $origin = $request->headers->get('Origin');
 
+        if ($origin === null) {
+            return false;
+        }
+
         if (in_array($origin, $this->options['allowedOrigins'])) {
             return true;
         }
 
-        /** @var string $pattern */
         foreach ($this->options['allowedOriginsPatterns'] as $pattern) {
             if (preg_match($pattern, $origin)) {
                 return true;
@@ -219,7 +222,7 @@ class CorsService
         } else {
             // For dynamic headers, set the requested Origin header when set and allowed
             if ($this->isCorsRequest($request) && $this->isOriginAllowed($request)) {
-                $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
+                $response->headers->set('Access-Control-Allow-Origin', (string) $request->headers->get('Origin'));
             }
 
             $this->varyHeader($response, 'Origin');
@@ -250,7 +253,7 @@ class CorsService
     private function configureAllowedHeaders(Response $response, Request $request): void
     {
         if ($this->options['allowAllHeaders'] === true) {
-            $allowHeaders = $request->headers->get('Access-Control-Request-Headers');
+            $allowHeaders = (string) $request->headers->get('Access-Control-Request-Headers');
             $this->varyHeader($response, 'Access-Control-Request-Headers');
         } else {
             $allowHeaders = implode(', ', $this->options['allowedHeaders']);
