@@ -179,13 +179,12 @@ class CorsService
             return false;
         }
 
-        $origin = $request->headers->get('Origin');
+        $origin = (string) $request->headers->get('Origin');
 
         if (in_array($origin, $this->options['allowedOrigins'])) {
             return true;
         }
 
-        /** @var string $pattern */
         foreach ($this->options['allowedOriginsPatterns'] as $pattern) {
             if (preg_match($pattern, $origin)) {
                 return true;
