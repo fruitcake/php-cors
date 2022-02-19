@@ -55,4 +55,4 @@ jobs:
 
     - name: Check Code Coverage
       run: php vendor/bin/phpunit --verbose --coverage-text
-      if: matrix.dependency-version == 'prefer-stable'
+      if: matrix.dependency-version == 'prefer-stable' && matrix.php == '8.1'
