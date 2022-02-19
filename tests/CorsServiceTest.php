@@ -21,7 +21,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itCanHaveOptions()
+    public function itCanHaveOptions(): void
     {
         $service = new CorsService([
             'allowedOrigins' => ['localhost']
@@ -34,7 +34,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itCanHaveNoOptions()
+    public function itCanHaveNoOptions(): void
     {
         $service = new CorsService();
         $this->assertInstanceOf(CorsService::class, $service);
@@ -44,7 +44,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itCanHaveEmptyOptions()
+    public function itCanHaveEmptyOptions(): void
     {
         $service = new CorsService([]);
         $this->assertInstanceOf(CorsService::class, $service);
@@ -54,27 +54,29 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itThrowsExceptionOnInvalidExposedHeaders()
+    public function itThrowsExceptionOnInvalidExposedHeaders(): void
     {
         $this->expectException(InvalidOptionException::class);
 
+        /** @phpstan-ignore-next-line */
         $service = new CorsService(['exposedHeaders' => true]);
     }
 
     /**
      * @test
      */
-    public function itThrowsExceptionOnInvalidOriginsArray()
+    public function itThrowsExceptionOnInvalidOriginsArray(): void
     {
         $this->expectException(InvalidOptionException::class);
 
+        /** @phpstan-ignore-next-line */
         $service = new CorsService(['allowedOrigins' => 'string']);
     }
 
     /**
      * @test
      */
-    public function itNormalizesWildcardOrigins()
+    public function itNormalizesWildcardOrigins(): void
     {
         $origins = ['*'];
 
@@ -87,7 +89,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itConvertsWildcardOriginPatterns()
+    public function itConvertsWildcardOriginPatterns(): void
     {
         $service = new CorsService(['allowedOrigins' => ['*.mydomain.com']]);
         $this->assertInstanceOf(CorsService::class, $service);
@@ -99,7 +101,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function itNormalizesUnderscoreOptions()
+    public function itNormalizesUnderscoreOptions(): void
     {
         $origins = ['localhost'];
 
@@ -109,7 +111,11 @@ class CorsServiceTest extends TestCase
         $this->assertEquals($origins, $this->getOptionsFromService($service)['allowedOrigins']);
     }
 
-    private function getOptionsFromService(CorsService $service)
+    /**
+     * @param CorsService $service
+     * @return array<mixed>
+     */
+    private function getOptionsFromService(CorsService $service): array
     {
         $reflected = new \ReflectionClass($service);
 
