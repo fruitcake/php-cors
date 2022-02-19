@@ -32,9 +32,9 @@ jobs:
         composer update --prefer-dist --no-interaction --no-suggest --with-all-dependencies
 
     - name: Check Code Coverage
-      run: vendor/bin/phpunit --verbose --coverage-text --coverage-clover=clover.xml --coverage-html=coverage.html
+      run: vendor/bin/phpunit --verbose --coverage-text --coverage-clover=clover.xml --coverage-html=coverage
 
     - uses: actions/upload-artifact@v2
       with:
-        name: coverage.html
-        path: coverage.html
+        name: coverage
+        path: coverage
