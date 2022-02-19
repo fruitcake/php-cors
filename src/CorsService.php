@@ -35,13 +35,16 @@ use Symfony\Component\HttpFoundation\Response;
  * }
  *
  * @phpstan-type CorsNormalizedOptions array{
- *  'allowedOrigins': string[]|true,
+ *  'allowedOrigins': string[],
  *  'allowedOriginsPatterns': string[],
  *  'supportsCredentials': bool,
- *  'allowedHeaders': string[]|bool,
- *  'allowedMethods': string[]|bool,
+ *  'allowedHeaders': string[],
+ *  'allowedMethods': string[],
  *  'exposedHeaders': string[],
- *  'maxAge': int|bool|null
+ *  'maxAge': int|bool|null,
+ *  'allowAllOrigins': bool,
+ *  'allowAllHeaders': bool,
+ *  'allowAllMethods': bool,
  * }
  */
 class CorsService
@@ -99,21 +102,14 @@ class CorsService
             }
         }
 
-        // normalize array('*') to true
-        if (in_array('*', $options['allowedOrigins'])) {
-            $options['allowedOrigins'] = true;
-        }
-        if (in_array('*', $options['allowedHeaders'])) {
-            $options['allowedHeaders'] = true;
-        } else {
-            $options['allowedHeaders'] = array_map('strtolower', $options['allowedHeaders']);
-        }
+        // Normalize case
+        $options['allowedHeaders'] = array_map('strtolower', $options['allowedHeaders']);
+        $options['allowedMethods'] = array_map('strtoupper', $options['allowedMethods']);
 
-        if (in_array('*', $options['allowedMethods'])) {
-            $options['allowedMethods'] = true;
-        } else {
-            $options['allowedMethods'] = array_map('strtoupper', $options['allowedMethods']);
-        }
+        // Normalize ['*'] to true
+        $options['allowAllOrigins'] = in_array('*', $options['allowedOrigins']);
+        $options['allowAllHeaders'] = in_array('*', $options['allowedHeaders']);
+        $options['allowAllMethods'] = in_array('*', $options['allowedMethods']);
 
         return $options;
     }
@@ -175,7 +171,7 @@ class CorsService
 
     public function isOriginAllowed(Request $request): bool
     {
-        if ($this->options['allowedOrigins'] === true) {
+        if ($this->options['allowAllOrigins'] === true) {
             return true;
         }
 
@@ -213,12 +209,11 @@ class CorsService
 
     private function configureAllowedOrigin(Response $response, Request $request): void
     {
-        if ($this->options['allowedOrigins'] === true && !$this->options['supportsCredentials']) {
+        if ($this->options['allowAllOrigins'] === true && !$this->options['supportsCredentials']) {
             // Safe+cacheable, allow everything
             $response->headers->set('Access-Control-Allow-Origin', '*');
         } elseif ($this->isSingleOriginAllowed()) {
             // Single origins can be safely set
-            /** @phpstan-ignore-next-line */
             $response->headers->set('Access-Control-Allow-Origin', array_values($this->options['allowedOrigins'])[0]);
         } else {
             // For dynamic headers, set the requested Origin header when set and allowed
@@ -232,7 +227,7 @@ class CorsService
 
     private function isSingleOriginAllowed(): bool
     {
-        if ($this->options['allowedOrigins'] === true || count($this->options['allowedOriginsPatterns']) > 0) {
+        if ($this->options['allowAllOrigins'] === true || count($this->options['allowedOriginsPatterns']) > 0) {
             return false;
         }
 
@@ -241,11 +236,10 @@ class CorsService
 
     private function configureAllowedMethods(Response $response, Request $request): void
     {
-        if ($this->options['allowedMethods'] === true) {
+        if ($this->options['allowAllMethods'] === true) {
             $allowMethods = strtoupper($request->headers->get('Access-Control-Request-Method'));
             $this->varyHeader($response, 'Access-Control-Request-Method');
         } else {
-            /** @phpstan-ignore-next-line */
             $allowMethods = implode(', ', $this->options['allowedMethods']);
         }
 
@@ -254,11 +248,10 @@ class CorsService
 
     private function configureAllowedHeaders(Response $response, Request $request): void
     {
-        if ($this->options['allowedHeaders'] === true) {
+        if ($this->options['allowAllHeaders'] === true) {
             $allowHeaders = $request->headers->get('Access-Control-Request-Headers');
             $this->varyHeader($response, 'Access-Control-Request-Headers');
         } else {
-            /** @phpstan-ignore-next-line */
             $allowHeaders = implode(', ', $this->options['allowedHeaders']);
         }
         $response->headers->set('Access-Control-Allow-Headers', $allowHeaders);
