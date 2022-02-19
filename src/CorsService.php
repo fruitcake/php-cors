@@ -185,6 +185,7 @@ class CorsService
             return true;
         }
 
+        /** @var string $pattern */
         foreach ($this->options['allowedOriginsPatterns'] as $pattern) {
             if (preg_match($pattern, $origin)) {
                 return true;
@@ -237,7 +238,7 @@ class CorsService
     private function configureAllowedMethods(Response $response, Request $request): void
     {
         if ($this->options['allowAllMethods'] === true) {
-            $allowMethods = strtoupper($request->headers->get('Access-Control-Request-Method'));
+            $allowMethods = strtoupper((string) $request->headers->get('Access-Control-Request-Method'));
             $this->varyHeader($response, 'Access-Control-Request-Method');
         } else {
             $allowMethods = implode(', ', $this->options['allowedMethods']);
@@ -282,8 +283,8 @@ class CorsService
     {
         if (!$response->headers->has('Vary')) {
             $response->headers->set('Vary', $header);
-        } elseif (!in_array($header, explode(', ', $response->headers->get('Vary')))) {
-            $response->headers->set('Vary', $response->headers->get('Vary') . ', ' . $header);
+        } elseif (!in_array($header, explode(', ', (string) $response->headers->get('Vary')))) {
+            $response->headers->set('Vary', ((string) $response->headers->get('Vary')) . ', ' . $header);
         }
 
         return $response;
