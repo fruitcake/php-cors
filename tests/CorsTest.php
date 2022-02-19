@@ -415,7 +415,7 @@ class CorsTest extends TestCase
 
         $this->assertTrue($response->headers->has('Access-Control-Allow-Methods'));
         // it will return the Access-Control-Request-Method pass in the request
-        $this->assertEquals('GET', $response->headers->get('Access-Control-Allow-Methods'));
+        $this->assertEquals('POST', $response->headers->get('Access-Control-Allow-Methods'));
         // it should vary this header
         $this->assertEquals('Access-Control-Request-Method', $response->headers->get('Vary'));
     }
