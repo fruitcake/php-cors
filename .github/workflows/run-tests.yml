@@ -37,13 +37,16 @@ jobs:
         extensions: mbstring
         coverage: pcov
 
+    - name: Configure matchers
+      uses: mheap/phpunit-matcher-action@v1
+
     - name: Install dependencies
       run: |
         composer require "symfony/http-foundation:${{ matrix.symfony }}" --no-interaction --no-update
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --with-all-dependencies
 
     - name: Execute Unit Tests
-      run: composer test
+      run: vendor/bin/phpunit --teamcity
 
     - name: Analyse with PHPStan
       run: composer analyse
@@ -54,5 +57,5 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
 
     - name: Check Code Coverage
-      run: php vendor/bin/phpunit --verbose --coverage-text
+      run: vendor/bin/phpunit --verbose --coverage-text
       if: matrix.dependency-version == 'prefer-stable' && matrix.php == '8.1'
