@@ -179,7 +179,11 @@ class CorsService
             return false;
         }
 
-        $origin = (string) $request->headers->get('Origin');
+        $origin = $request->headers->get('Origin');
+
+        if ($origin === null) {
+            return false;
+        }
 
         if (in_array($origin, $this->options['allowedOrigins'])) {
             return true;
