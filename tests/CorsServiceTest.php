@@ -17,7 +17,18 @@ use Fruitcake\Cors\Exceptions\InvalidOptionException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @phpstan-import-type CorsNormalizedOptions from CorsService
+ * @phpstan-type CorsNormalizedOptions array{
+ *  'allowedOrigins': string[],
+ *  'allowedOriginsPatterns': string[],
+ *  'supportsCredentials': bool,
+ *  'allowedHeaders': string[],
+ *  'allowedMethods': string[],
+ *  'exposedHeaders': string[],
+ *  'maxAge': int|bool|null,
+ *  'allowAllOrigins': bool,
+ *  'allowAllHeaders': bool,
+ *  'allowAllMethods': bool,
+ * }
  */
 class CorsServiceTest extends TestCase
 {
@@ -206,12 +217,15 @@ class CorsServiceTest extends TestCase
     {
         $reflected = new \ReflectionClass($service);
 
-        $property = $reflected->getProperty('options');
-        $property->setAccessible(true);
+        $properties = $reflected->getProperties(\ReflectionProperty::IS_PRIVATE);
+
+        $options = [];
+        foreach ($properties as $property) {
+            $property->setAccessible(true);
+            $options[$property->getName()] = $property->getValue($service);
+        }
 
         /** @var CorsNormalizedOptions $options */
-        $options = $property->getValue($service);
-
         return $options;
     }
 }
