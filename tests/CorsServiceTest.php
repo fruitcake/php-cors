@@ -69,7 +69,16 @@ class CorsServiceTest extends TestCase
     {
         $service = new CorsService();
         $this->assertInstanceOf(CorsService::class, $service);
-        $this->assertEquals([], $this->getOptionsFromService($service)['allowedOrigins']);
+
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals([], $normalized['allowedOrigins']);
+        $this->assertEquals([], $normalized['allowedOriginsPatterns']);
+        $this->assertEquals([], $normalized['allowedHeaders']);
+        $this->assertEquals([], $normalized['allowedMethods']);
+        $this->assertEquals([], $normalized['exposedHeaders']);
+        $this->assertEquals(0, $normalized['maxAge']);
+        $this->assertEquals(false, $normalized['supportsCredentials']);
     }
 
     /**
@@ -79,7 +88,16 @@ class CorsServiceTest extends TestCase
     {
         $service = new CorsService([]);
         $this->assertInstanceOf(CorsService::class, $service);
-        $this->assertEquals([], $this->getOptionsFromService($service)['allowedOrigins']);
+
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals([], $normalized['allowedOrigins']);
+        $this->assertEquals([], $normalized['allowedOriginsPatterns']);
+        $this->assertEquals([], $normalized['allowedHeaders']);
+        $this->assertEquals([], $normalized['allowedMethods']);
+        $this->assertEquals([], $normalized['exposedHeaders']);
+        $this->assertEquals(0, $normalized['maxAge']);
+        $this->assertEquals(false, $normalized['supportsCredentials']);
     }
 
     /**
