@@ -35,7 +35,6 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         extensions: mbstring
-        coverage: pcov
 
     - name: Configure matchers
       uses: mheap/phpunit-matcher-action@v1
@@ -46,7 +45,7 @@ jobs:
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --with-all-dependencies
 
     - name: Execute Unit Tests
-      run: vendor/bin/phpunit --teamcity
+      run: composer test
 
     - name: Analyse with PHPStan
       run: composer analyse
@@ -55,7 +54,3 @@ jobs:
     - name: Check PSR-12 Codestyle
       run: composer test
       if: matrix.os == 'ubuntu-latest'
-
-    - name: Check Code Coverage
-      run: vendor/bin/phpunit --verbose --coverage-text
-      if: matrix.dependency-version == 'prefer-stable' && matrix.php == '8.1'
