@@ -105,13 +105,6 @@ class CorsService
 
     private function normalizeOptions(): void
     {
-        // Transform wildcard pattern
-        foreach ($this->allowedOrigins as $origin) {
-            if (strpos($origin, '*') !== false) {
-                $this->allowedOriginsPatterns[] = $this->convertWildcardToPattern($origin);
-            }
-        }
-
         // Normalize case
         $this->allowedHeaders = array_map('strtolower', $this->allowedHeaders);
         $this->allowedMethods = array_map('strtoupper', $this->allowedMethods);
@@ -120,6 +113,15 @@ class CorsService
         $this->allowAllOrigins = in_array('*', $this->allowedOrigins);
         $this->allowAllHeaders = in_array('*', $this->allowedHeaders);
         $this->allowAllMethods = in_array('*', $this->allowedMethods);
+
+        // Transform wildcard pattern
+        if (!$this->allowAllOrigins) {
+            foreach ($this->allowedOrigins as $origin) {
+                if (strpos($origin, '*') !== false) {
+                    $this->allowedOriginsPatterns[] = $this->convertWildcardToPattern($origin);
+                }
+            }
+        }
     }
 
     /**
