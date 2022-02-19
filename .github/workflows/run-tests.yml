@@ -46,7 +46,7 @@ jobs:
 
     - name: Analyse with PHPStan
       run: composer analyse
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-latest' || (symfony.version == '4.x' && matrix.dependency-version === 'lowest')
 
     - name: Check PSR-12 Codestyle
       run: composer test
