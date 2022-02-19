@@ -1,4 +1,4 @@
-# Stack/Cors
+# CORS for PHP (using the Symfony HttpFoundation)
 
 [![Unit Tests](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fruitcake/php-cors/actions)
 [![PHPStan Level 9](https://img.shields.io/badge/PHPStan-Level%209-blue)](https://github.com/fruitcake/php-cors/actions)
