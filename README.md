@@ -33,8 +33,8 @@ This package can be used as a library. You can use it in your framework using:
 | allowedOrigins         | Matches the request origin.                                | `[]`          |
 | allowedOriginsPatterns | Matches the request origin with `preg_match`.              | `[]`          |
 | allowedHeaders         | Sets the Access-Control-Allow-Headers response header.     | `[]`          |
-| exposedHeaders         | Sets the Access-Control-Expose-Headers response header.    | `false`       |
-| maxAge                 | Sets the Access-Control-Max-Age response header.           | `false`       |
+| exposedHeaders         | Sets the Access-Control-Expose-Headers response header.    | `[]`          |
+| maxAge                 | Sets the Access-Control-Max-Age response header.           | `0`           |
 | supportsCredentials    | Sets the Access-Control-Allow-Credentials header.          | `false`       |
 
 The _allowedMethods_ and _allowedHeaders_ options are case-insensitive.

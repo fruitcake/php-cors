@@ -55,11 +55,18 @@ class CorsService
             'maxAge' => 0,
         ];
 
-        if ($options['exposedHeaders'] && !is_array($options['exposedHeaders'])) {
-            throw new InvalidOptionException("CORS option `exposedHeaders` should be `false` or an array");
+        if ($options['exposedHeaders'] === false) {
+            $options['exposedHeaders'] = [];
         }
 
-        foreach (['allowedOrigins', 'allowedOriginsPatterns',  'allowedHeaders', 'allowedMethods'] as $key) {
+        $arrayHeaders = [
+            'allowedOrigins',
+            'allowedOriginsPatterns',
+            'allowedHeaders',
+            'allowedMethods',
+            'exposedHeaders',
+        ];
+        foreach ($arrayHeaders as $key) {
             if (!is_array($options[$key])) {
                 throw new InvalidOptionException("CORS option `{$key}` should be an array");
             }
