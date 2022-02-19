@@ -258,7 +258,7 @@ class CorsService
     private function configureMaxAge(Response $response, Request $request)
     {
         if ($this->options['maxAge'] !== null) {
-            $response->headers->set('Access-Control-Max-Age', (int) $this->options['maxAge']);
+            $response->headers->set('Access-Control-Max-Age', (string) $this->options['maxAge']);
         }
     }
 
