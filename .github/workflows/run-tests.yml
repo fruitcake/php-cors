@@ -52,3 +52,7 @@ jobs:
     - name: Check PSR-12 Codestyle
       run: composer test
       if: matrix.os == 'ubuntu-latest'
+
+    - name: Check Code Coverage
+      run: php vendor/bin/phpunit --verbose --coverage-text
+      if: matrix.dependency-version == 'prefer-stable'
