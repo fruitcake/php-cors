@@ -26,12 +26,29 @@ class CorsServiceTest extends TestCase
      */
     public function itCanHaveOptions(): void
     {
-        $service = new CorsService([
-            'allowedOrigins' => ['localhost']
-        ]);
+        $options = [
+            'allowedOrigins' => ['localhost'],
+            'allowedOriginsPatterns' => ['/something/'],
+            'allowedHeaders' => ['x-custom'],
+            'allowedMethods' => ['PUT'],
+            'maxAge' => 684,
+            'supportsCredentials' => true,
+            'exposedHeaders' => ['x-custom-2'],
+        ];
+
+        $service = new CorsService($options);
 
         $this->assertInstanceOf(CorsService::class, $service);
-        $this->assertEquals(['localhost'], $this->getOptionsFromService($service)['allowedOrigins']);
+
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals($options['allowedOrigins'], $normalized['allowedOrigins']);
+        $this->assertEquals($options['allowedOriginsPatterns'], $normalized['allowedOriginsPatterns']);
+        $this->assertEquals($options['allowedHeaders'], $normalized['allowedHeaders']);
+        $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
+        $this->assertEquals($options['maxAge'], $normalized['maxAge']);
+        $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
     }
 
     /**
@@ -66,6 +83,24 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
+    public function itAllowsNullMaxAge(): void
+    {
+        $service = new CorsService(['maxAge' => null]);
+        $this->assertNull($this->getOptionsFromService($service)['maxAge']);
+    }
+
+    /**
+     * @test
+     */
+    public function itAllowsZeroMaxAge(): void
+    {
+        $service = new CorsService(['maxAge' => 0]);
+        $this->assertEquals(0, $this->getOptionsFromService($service)['maxAge']);
+    }
+
+    /**
+     * @test
+     */
     public function itThrowsExceptionOnInvalidExposedHeaders(): void
     {
         $this->expectException(InvalidOptionException::class);
@@ -90,12 +125,32 @@ class CorsServiceTest extends TestCase
      */
     public function itNormalizesWildcardOrigins(): void
     {
-        $origins = ['*'];
-
-        $service = new CorsService(['allowedOrigins' => $origins]);
+        $service = new CorsService(['allowedOrigins' => ['*']]);
         $this->assertInstanceOf(CorsService::class, $service);
 
         $this->assertTrue($this->getOptionsFromService($service)['allowAllOrigins']);
+    }
+
+    /**
+     * @test
+     */
+    public function itNormalizesWildcardHeaders(): void
+    {
+        $service = new CorsService(['allowedHeaders' => ['*']]);
+        $this->assertInstanceOf(CorsService::class, $service);
+
+        $this->assertTrue($this->getOptionsFromService($service)['allowAllHeaders']);
+    }
+
+    /**
+     * @test
+     */
+    public function itNormalizesWildcardMethods(): void
+    {
+        $service = new CorsService(['allowedMethods' => ['*']]);
+        $this->assertInstanceOf(CorsService::class, $service);
+
+        $this->assertTrue($this->getOptionsFromService($service)['allowAllMethods']);
     }
 
     /**
@@ -115,12 +170,32 @@ class CorsServiceTest extends TestCase
      */
     public function itNormalizesUnderscoreOptions(): void
     {
-        $origins = ['localhost'];
+        $options = [
+            'allowed_origins' => ['localhost'],
+            'allowed_origins_patterns' => ['/something/'],
+            'allowed_headers' => ['x-custom'],
+            'allowed_methods' => ['PUT'],
+            'max_age' => 684,
+            'supports_credentials' => true,
+            'exposed_headers' => ['x-custom-2'],
+        ];
 
-        $service = new CorsService(['allowed_origins' => $origins]);
+        $service = new CorsService($options);
         $this->assertInstanceOf(CorsService::class, $service);
 
-        $this->assertEquals($origins, $this->getOptionsFromService($service)['allowedOrigins']);
+        $this->assertEquals($options['allowed_origins'], $this->getOptionsFromService($service)['allowedOrigins']);
+        $this->assertEquals(
+            $options['allowed_origins_patterns'],
+            $this->getOptionsFromService($service)['allowedOriginsPatterns']
+        );
+        $this->assertEquals($options['allowed_headers'], $this->getOptionsFromService($service)['allowedHeaders']);
+        $this->assertEquals($options['allowed_methods'], $this->getOptionsFromService($service)['allowedMethods']);
+        $this->assertEquals($options['exposed_headers'], $this->getOptionsFromService($service)['exposedHeaders']);
+        $this->assertEquals($options['max_age'], $this->getOptionsFromService($service)['maxAge']);
+        $this->assertEquals(
+            $options['supports_credentials'],
+            $this->getOptionsFromService($service)['supportsCredentials']
+        );
     }
 
     /**
