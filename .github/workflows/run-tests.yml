@@ -42,8 +42,12 @@ jobs:
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --with-all-dependencies
 
     - name: Execute Unit Tests
-      run: vendor/bin/phpunit
+      run: composer test
+
+    - name: Analyse with PHPStan
+      run: composer analyse
+      if: matrix.os == 'ubuntu-latest'
 
     - name: Check PSR-12 Codestyle
-      run: vendor/bin/phpcs --standard=psr12 --exclude=Generic.Files.LineLength src/
+      run: composer test
       if: matrix.os == 'ubuntu-latest'
