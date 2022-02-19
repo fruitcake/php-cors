@@ -24,10 +24,11 @@ class CorsServiceTest extends TestCase
     public function itCanHaveOptions()
     {
         $service = new CorsService([
-            'allowedOrigins' => ['*']
+            'allowedOrigins' => ['localhost']
         ]);
 
         $this->assertInstanceOf(CorsService::class, $service);
+        $this->assertEquals(['localhost'], $this->getOptionsFromService($service)['allowedOrigins']);
     }
 
     /**
@@ -37,6 +38,7 @@ class CorsServiceTest extends TestCase
     {
         $service = new CorsService();
         $this->assertInstanceOf(CorsService::class, $service);
+        $this->assertEquals([], $this->getOptionsFromService($service)['allowedOrigins']);
     }
 
     /**
@@ -46,6 +48,7 @@ class CorsServiceTest extends TestCase
     {
         $service = new CorsService([]);
         $this->assertInstanceOf(CorsService::class, $service);
+        $this->assertEquals([], $this->getOptionsFromService($service)['allowedOrigins']);
     }
 
     /**
