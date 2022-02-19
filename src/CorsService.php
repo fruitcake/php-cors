@@ -64,24 +64,31 @@ class CorsService
      */
     public function __construct(array $options = [])
     {
-        $this->allowedOrigins = $options['allowedOrigins'] ?? $options['allowed_origins'] ?? [];
+        $this->allowedOrigins = $options['allowedOrigins'] ?? $options['allowed_origins'] ?? $this->allowedOrigins;
         $this->allowedOriginsPatterns =
-            $options['allowedOriginsPatterns'] ?? $options['allowed_origins_patterns'] ?? [];
-        $this->allowedMethods = $options['allowedMethods'] ?? $options['allowed_methods'] ?? [];
-        $this->allowedHeaders = $options['allowedHeaders'] ?? $options['allowed_headers'] ?? [];
-        $this->supportsCredentials = $options['supportsCredentials'] ?? $options['supports_credentials'] ?? false;
+            $options['allowedOriginsPatterns'] ?? $options['allowed_origins_patterns'] ?? $this->allowedOriginsPatterns;
+        $this->allowedMethods = $options['allowedMethods'] ?? $options['allowed_methods'] ?? $this->allowedMethods;
+        $this->allowedHeaders = $options['allowedHeaders'] ?? $options['allowed_headers'] ?? $this->allowedHeaders;
+        $this->supportsCredentials =
+            $options['supportsCredentials'] ?? $options['supports_credentials'] ?? $this->supportsCredentials;
 
-        $maxAge = 0;
+        $maxAge = $this->maxAge;
         if (array_key_exists('maxAge', $options)) {
             $maxAge = $options['maxAge'];
         } elseif (array_key_exists('max_age', $options)) {
             $maxAge = $options['max_age'];
         }
-        $this->maxAge = $maxAge === null ? null : (int) $maxAge;
+        $this->maxAge = $maxAge === null ? null : (int)$maxAge;
 
-        $exposedHeaders = $options['exposedHeaders'] ?? $options['exposed_headers'] ?? [];
+        $exposedHeaders = $options['exposedHeaders'] ?? $options['exposed_headers'] ?? $this->exposedHeaders;
         $this->exposedHeaders = $exposedHeaders === false ? [] : $exposedHeaders;
 
+        $this->validateOptions();
+        $this->normalizeOptions();
+    }
+
+    private function validateOptions(): void
+    {
         $arrayHeaders = [
             'allowedOrigins',
             'allowedOriginsPatterns',
@@ -94,7 +101,10 @@ class CorsService
                 throw new InvalidOptionException("CORS option `{$key}` should be an array");
             }
         }
+    }
 
+    private function normalizeOptions(): void
+    {
         // Transform wildcard pattern
         foreach ($this->allowedOrigins as $origin) {
             if (strpos($origin, '*') !== false) {
