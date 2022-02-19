@@ -18,29 +18,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @phpstan-type CorsInputOptions array{
- *  'allowedOrigins'?: array{string}|array{},
- *  'allowedOriginsPatterns'?: array{string}|array{},
+ *  'allowedOrigins'?: string[],
+ *  'allowedOriginsPatterns'?: string[],
  *  'supportsCredentials'?: bool,
- *  'allowedHeaders'?: array{string}|array{},
- *  'allowedMethods'?: array{string}|array{},
- *  'exposedHeaders'?: array{string}|array{},
+ *  'allowedHeaders'?: string[],
+ *  'allowedMethods'?: string[],
+ *  'exposedHeaders'?: string[],
  *  'maxAge'?: int|bool|null,
- *  'allowed_origins'?: array{string}|array{},
- *  'allowed_origins_patterns'?: array{string}|array{},
+ *  'allowed_origins'?: string[],
+ *  'allowed_origins_patterns'?: string[],
  *  'supports_credentials'?: bool,
- *  'allowed_headers'?: array{string}|array{},
- *  'allowed_methods'?: array{string}|array{},
- *  'exposed_headers'?: array{string}|array{},
+ *  'allowed_headers'?: string[],
+ *  'allowed_methods'?: string[],
+ *  'exposed_headers'?: string[],
  *  'max_age'?: int|bool|null
  * }
  *
  * @phpstan-type CorsNormalizedOptions array{
- *  'allowedOrigins': array{string}|array{}|true,
- *  'allowedOriginsPatterns': array{string}|array{},
+ *  'allowedOrigins': string[]|true,
+ *  'allowedOriginsPatterns': string[],
  *  'supportsCredentials': bool,
- *  'allowedHeaders': array{string}|array{}|bool,
- *  'allowedMethods': array{string}|array{}|bool,
- *  'exposedHeaders': array{string}|array{},
+ *  'allowedHeaders': string[]|bool,
+ *  'allowedMethods': string[]|bool,
+ *  'exposedHeaders': string[],
  *  'maxAge': int|bool|null
  * }
  */
