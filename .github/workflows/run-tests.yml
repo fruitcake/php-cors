@@ -50,4 +50,4 @@ jobs:
 
     - name: Check PSR-12 Codestyle
       run: composer test
-      if: matrix.os == 'ubuntu-latest' && matrix.php == '8.1'
+      if: matrix.os == 'ubuntu-latest'
