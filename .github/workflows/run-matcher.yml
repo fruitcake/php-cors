@@ -1,0 +1,33 @@
+name: Unit Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: '0 0 * * *'
+
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+
+    name: PHPUnit Matcher
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.1
+        extensions: mbstring
+
+    - name: Configure matchers
+      uses: mheap/phpunit-matcher-action@v1
+
+    - name: Install dependencies
+      run: |
+        composer update --prefer-dist --no-interaction --no-suggest --with-all-dependencies
+
+    - name: Execute Unit Tests
+      run: vendor/bin/phpunit --teamcity
