@@ -16,15 +16,51 @@ use Fruitcake\Cors\Exceptions\InvalidOptionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @phpstan-type CorsInputOptions array{
+ *  'allowedOrigins'?: array{string}|array{},
+ *  'allowedOriginsPatterns'?: array{string}|array{},
+ *  'supportsCredentials'?: bool,
+ *  'allowedHeaders'?: array{string}|array{},
+ *  'allowedMethods'?: array{string}|array{},
+ *  'exposedHeaders'?: array{string}|array{},
+ *  'maxAge'?: int|bool|null,
+ *  'allowed_origins'?: array{string}|array{},
+ *  'allowed_origins_patterns'?: array{string}|array{},
+ *  'supports_credentials'?: bool,
+ *  'allowed_headers'?: array{string}|array{},
+ *  'allowed_methods'?: array{string}|array{},
+ *  'exposed_headers'?: array{string}|array{},
+ *  'max_age'?: int|bool|null
+ * }
+ *
+ * @phpstan-type CorsNormalizedOptions array{
+ *  'allowedOrigins': array{string}|array{}|true,
+ *  'allowedOriginsPatterns': array{string}|array{},
+ *  'supportsCredentials': bool,
+ *  'allowedHeaders': array{string}|array{}|bool,
+ *  'allowedMethods': array{string}|array{}|bool,
+ *  'exposedHeaders': array{string}|array{},
+ *  'maxAge': int|bool|null
+ * }
+ */
 class CorsService
 {
+    /** @var CorsNormalizedOptions */
     private $options;
 
+    /**
+     * @param CorsInputOptions $options
+     */
     public function __construct(array $options = [])
     {
         $this->options = $this->normalizeOptions($options);
     }
 
+    /**
+     * @param CorsInputOptions $options
+     * @return CorsNormalizedOptions
+     */
     private function normalizeOptions(array $options = []): array
     {
         $aliases = [
@@ -191,7 +227,7 @@ class CorsService
         return $response;
     }
 
-    private function configureAllowedOrigin(Response $response, Request $request)
+    private function configureAllowedOrigin(Response $response, Request $request): void
     {
         if ($this->options['allowedOrigins'] === true && !$this->options['supportsCredentials']) {
             // Safe+cacheable, allow everything
@@ -211,14 +247,14 @@ class CorsService
 
     private function isSingleOriginAllowed(): bool
     {
-        if ($this->options['allowedOrigins'] === true || !empty($this->options['allowedOriginsPatterns'])) {
+        if ($this->options['allowedOrigins'] === true || count($this->options['allowedOriginsPatterns']) > 0) {
             return false;
         }
 
         return count($this->options['allowedOrigins']) === 1;
     }
 
-    private function configureAllowedMethods(Response $response, Request $request)
+    private function configureAllowedMethods(Response $response, Request $request): void
     {
         if ($this->options['allowedMethods'] === true) {
             $allowMethods = strtoupper($request->headers->get('Access-Control-Request-Method'));
@@ -230,7 +266,7 @@ class CorsService
         $response->headers->set('Access-Control-Allow-Methods', $allowMethods);
     }
 
-    private function configureAllowedHeaders(Response $response, Request $request)
+    private function configureAllowedHeaders(Response $response, Request $request): void
     {
         if ($this->options['allowedHeaders'] === true) {
             $allowHeaders = $request->headers->get('Access-Control-Request-Headers');
@@ -241,28 +277,28 @@ class CorsService
         $response->headers->set('Access-Control-Allow-Headers', $allowHeaders);
     }
 
-    private function configureAllowCredentials(Response $response, Request $request)
+    private function configureAllowCredentials(Response $response, Request $request): void
     {
         if ($this->options['supportsCredentials']) {
             $response->headers->set('Access-Control-Allow-Credentials', 'true');
         }
     }
 
-    private function configureExposedHeaders(Response $response, Request $request)
+    private function configureExposedHeaders(Response $response, Request $request): void
     {
         if ($this->options['exposedHeaders']) {
             $response->headers->set('Access-Control-Expose-Headers', implode(', ', $this->options['exposedHeaders']));
         }
     }
 
-    private function configureMaxAge(Response $response, Request $request)
+    private function configureMaxAge(Response $response, Request $request): void
     {
         if ($this->options['maxAge'] !== null) {
-            $response->headers->set('Access-Control-Max-Age', (int) $this->options['maxAge']);
+            $response->headers->set('Access-Control-Max-Age', (string) $this->options['maxAge']);
         }
     }
 
-    public function varyHeader(Response $response, $header): Response
+    public function varyHeader(Response $response, string $header): Response
     {
         if (!$response->headers->has('Vary')) {
             $response->headers->set('Vary', $header);

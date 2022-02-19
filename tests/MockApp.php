@@ -16,8 +16,12 @@ use Fruitcake\Cors\CorsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @phpstan-import-type CorsInputOptions from CorsService
+ */
 class MockApp
 {
+    /** @var array{'Vary'?: string} */
     private $responseHeaders;
 
     /**
@@ -25,20 +29,14 @@ class MockApp
      */
     private $cors;
 
-    private $defaultOptions = [
-        'allowedHeaders'         => [],
-        'allowedMethods'         => [],
-        'allowedOrigins'         => [],
-        'allowedOriginsPatterns' => [],
-        'exposedHeaders'         => [],
-        'maxAge'                 => 0,
-        'supportsCredentials'    => false,
-    ];
-
-    public function __construct(array $responseHeaders, $options)
+    /**
+     * @param array{'Vary'?: string} $responseHeaders
+     * @param CorsInputOptions $options
+     */
+    public function __construct(array $responseHeaders, array $options = [])
     {
         $this->responseHeaders = $responseHeaders;
-        $this->cors = new CorsService(array_merge($this->defaultOptions, $options));
+        $this->cors = new CorsService($options);
     }
 
     public function handle(Request $request): Response
