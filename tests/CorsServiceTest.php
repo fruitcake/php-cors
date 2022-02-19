@@ -21,7 +21,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_have_options()
+    public function itCanHaveOptions()
     {
         $service = new CorsService([
             'allowedOrigins' => ['*']
@@ -33,7 +33,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_have_no_options()
+    public function itCanHaveNoOptions()
     {
         $service = new CorsService();
         $this->assertInstanceOf(CorsService::class, $service);
@@ -42,7 +42,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_have_empty_options()
+    public function itCanHaveEmptyOptions()
     {
         $service = new CorsService([]);
         $this->assertInstanceOf(CorsService::class, $service);
@@ -51,7 +51,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_exception_on_invalid_exposed_headers()
+    public function itThrowsExceptionOnInvalidExposedHeaders()
     {
         $this->expectException(InvalidOptionException::class);
 
@@ -61,7 +61,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_exception_on_invalid_origins_array()
+    public function itThrowsExceptionOnInvalidOriginsArray()
     {
         $this->expectException(InvalidOptionException::class);
 
@@ -71,7 +71,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_normalizes_wildcard_options()
+    public function itNormalizesWildcardOrigins()
     {
         $origins = ['*'];
 
@@ -84,7 +84,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_converts_origin_patterns()
+    public function itConvertsWildcardOriginPatterns()
     {
         $service = new CorsService(['allowedOrigins' => ['*.mydomain.com']]);
         $this->assertInstanceOf(CorsService::class, $service);
@@ -96,7 +96,7 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
-    public function it_normalizes_underscore_options()
+    public function itNormalizesUnderscoreOptions()
     {
         $origins = ['localhost'];
 
