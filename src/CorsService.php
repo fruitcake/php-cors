@@ -64,6 +64,16 @@ class CorsService
      */
     public function __construct(array $options = [])
     {
+        if ($options) {
+            $this->setOptions($options);
+        }
+    }
+
+    /**
+     * @param CorsInputOptions $options
+     */
+    public function setOptions(array $options): void
+    {
         $this->allowedOrigins = $options['allowedOrigins'] ?? $options['allowed_origins'] ?? $this->allowedOrigins;
         $this->allowedOriginsPatterns =
             $options['allowedOriginsPatterns'] ?? $options['allowed_origins_patterns'] ?? $this->allowedOriginsPatterns;
