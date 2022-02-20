@@ -38,26 +38,21 @@ use Symfony\Component\HttpFoundation\Response;
 class CorsService
 {
     /** @var string[]  */
-    private $allowedOrigins = [];
+    private array $allowedOrigins = [];
     /** @var string[] */
-    private $allowedOriginsPatterns = [];
+    private array $allowedOriginsPatterns = [];
     /** @var string[] */
-    private $allowedMethods = [];
+    private array $allowedMethods = [];
     /** @var string[] */
-    private $allowedHeaders = [];
+    private array $allowedHeaders = [];
     /** @var string[] */
-    private $exposedHeaders = [];
-    /** @var bool */
-    private $supportsCredentials = false;
-    /** @var null|int */
-    private $maxAge = 0;
+    private array $exposedHeaders = [];
+    private bool $supportsCredentials = false;
+    private ?int $maxAge = 0;
 
-    /** @var bool */
-    private $allowAllOrigins = false;
-    /** @var bool */
-    private $allowAllMethods = false;
-    /** @var bool */
-    private $allowAllHeaders = false;
+    private bool $allowAllOrigins = false;
+    private bool $allowAllMethods = false;
+    private bool $allowAllHeaders = false;
 
     /**
      * @param CorsInputOptions $options
