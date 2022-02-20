@@ -201,7 +201,7 @@ class CorsServiceTest extends TestCase
      */
     public function itThrowsExceptionOnInvalidExposedHeaders(): void
     {
-        $this->expectException(InvalidOptionException::class);
+        $this->expectException(\TypeError::class);
 
         /** @phpstan-ignore-next-line */
         $service = new CorsService(['exposedHeaders' => true]);
@@ -212,7 +212,7 @@ class CorsServiceTest extends TestCase
      */
     public function itThrowsExceptionOnInvalidOriginsArray(): void
     {
-        $this->expectException(InvalidOptionException::class);
+        $this->expectException(\TypeError::class);
 
         /** @phpstan-ignore-next-line */
         $service = new CorsService(['allowedOrigins' => 'string']);
