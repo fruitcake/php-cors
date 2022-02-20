@@ -65,6 +65,75 @@ class CorsServiceTest extends TestCase
     /**
      * @test
      */
+    public function itCanSetOptions(): void
+    {
+        $service = new CorsService();
+        $normalized = $this->getOptionsFromService($service);
+        $this->assertEquals([], $normalized['allowedOrigins']);
+
+        $this->assertInstanceOf(CorsService::class, $service);
+
+        $options = [
+            'allowedOrigins' => ['localhost'],
+            'allowedOriginsPatterns' => ['/something/'],
+            'allowedHeaders' => ['x-custom'],
+            'allowedMethods' => ['PUT'],
+            'maxAge' => 684,
+            'supportsCredentials' => true,
+            'exposedHeaders' => ['x-custom-2'],
+        ];
+
+        $service->setOptions($options);
+
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals($options['allowedOrigins'], $normalized['allowedOrigins']);
+        $this->assertEquals($options['allowedOriginsPatterns'], $normalized['allowedOriginsPatterns']);
+        $this->assertEquals($options['allowedHeaders'], $normalized['allowedHeaders']);
+        $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
+        $this->assertEquals($options['maxAge'], $normalized['maxAge']);
+        $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
+    }
+
+    /**
+     * @test
+     */
+    public function itCanOverwriteSetOptions(): void
+    {
+        $service = new CorsService(['allowedOrigins' => ['example.com']]);
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals(['example.com'], $normalized['allowedOrigins']);
+
+        $this->assertInstanceOf(CorsService::class, $service);
+
+        $options = [
+            'allowedOrigins' => ['localhost'],
+            'allowedOriginsPatterns' => ['/something/'],
+            'allowedHeaders' => ['x-custom'],
+            'allowedMethods' => ['PUT'],
+            'maxAge' => 684,
+            'supportsCredentials' => true,
+            'exposedHeaders' => ['x-custom-2'],
+        ];
+
+        $service->setOptions($options);
+
+        $normalized = $this->getOptionsFromService($service);
+
+        $this->assertEquals($options['allowedOrigins'], $normalized['allowedOrigins']);
+        $this->assertEquals($options['allowedOriginsPatterns'], $normalized['allowedOriginsPatterns']);
+        $this->assertEquals($options['allowedHeaders'], $normalized['allowedHeaders']);
+        $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
+        $this->assertEquals($options['maxAge'], $normalized['maxAge']);
+        $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
+    }
+
+    /**
+     * @test
+     */
     public function itCanHaveNoOptions(): void
     {
         $service = new CorsService();
