@@ -88,24 +88,7 @@ class CorsService
         $exposedHeaders = $options['exposedHeaders'] ?? $options['exposed_headers'] ?? $this->exposedHeaders;
         $this->exposedHeaders = $exposedHeaders === false ? [] : $exposedHeaders;
 
-        $this->validateOptions();
         $this->normalizeOptions();
-    }
-
-    private function validateOptions(): void
-    {
-        $arrayHeaders = [
-            'allowedOrigins',
-            'allowedOriginsPatterns',
-            'allowedHeaders',
-            'allowedMethods',
-            'exposedHeaders',
-        ];
-        foreach ($arrayHeaders as $key) {
-            if (!is_array($this->{$key})) {
-                throw new InvalidOptionException("CORS option `{$key}` should be an array");
-            }
-        }
     }
 
     private function normalizeOptions(): void
