@@ -14,7 +14,7 @@ http-{foundation,kernel} using application. It attempts to implement the
 
 [W3C Recommendation]: http://www.w3.org/TR/cors/
 
-> Note: This is a standalone fork of https://github.com/asm89/stack-cors
+> Note: This is a standalone fork of https://github.com/asm89/stack-cors and is compatible with the options for CorsService.
 ## Installation
 
 Require `fruitcake/php-cors` using composer.
