@@ -1,3 +1,5 @@
+name: Unit Tests
+
 on:
   push:
   pull_request:
@@ -10,16 +12,12 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.2, 7.3, 7.4, 8.0, 8.1]
-        symfony: [4.x, 5.x, 6.x]
+        php: [7.4, 8.0, 8.1]
+        symfony: [^4.4, ^5.4, ^6]
         dependency-version: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
         exclude:
-          - symfony: 6.x
-            php: 7.2
-          - symfony: 6.x
-            php: 7.3
-          - symfony: 6.x
+          - symfony: ^6
             php: 7.4
 
     name: PHP${{ matrix.php }} Symfony${{ matrix.symfony }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
@@ -34,14 +32,21 @@ jobs:
         php-version: ${{ matrix.php }}
         extensions: mbstring
 
+    - name: Configure matchers
+      uses: mheap/phpunit-matcher-action@v1
+
     - name: Install dependencies
       run: |
         composer require "symfony/http-foundation:${{ matrix.symfony }}" --no-interaction --no-update
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --with-all-dependencies
 
     - name: Execute Unit Tests
-      run: vendor/bin/phpunit
+      run: composer test
+
+    - name: Analyse with PHPStan
+      run: composer analyse
+      if: matrix.os == 'ubuntu-latest' && matrix.symfony != '^4.4'
 
     - name: Check PSR-12 Codestyle
-      run: vendor/bin/phpcs --standard=psr12 --exclude=Generic.Files.LineLength src/
+      run: composer test
       if: matrix.os == 'ubuntu-latest'
