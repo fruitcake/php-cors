@@ -10,7 +10,7 @@
          stopOnFailure="false"
 >
   <testsuites>
-    <testsuite name="Stack Cors Test Suite">
+    <testsuite name="Fruitcake Cors Test Suite">
       <directory>./tests</directory>
     </testsuite>
   </testsuites>

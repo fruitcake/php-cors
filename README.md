@@ -1,4 +1,11 @@
 # Stack/Cors
+## Stand-alone fork of https://github.com/asm89/stack-cors
+
+[![Tests](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml/badge.svg)](https://github.com/fruitcake/php-cors/actions/workflows/run-tests.yml)
+[![Packagist License](https://poser.pugx.org/fruitcake/php-corsr/license.png)](http://choosealicense.com/licenses/mit/)
+[![Latest Stable Version](https://poser.pugx.org/fruitcake/php-cors/version.png)](https://packagist.org/packages/fruitcake/php-cors)
+[![Total Downloads](https://poser.pugx.org/fruitcake/php-cors/d/total.png)](https://packagist.org/packages/fruitcake/php-cors)
+[![Fruitcake](https://img.shields.io/badge/Powered%20By-Fruitcake-b2bc35.svg)](https://fruitcake.nl/)
 
 Library and middleware enabling cross-origin resource sharing for your
 http-{foundation,kernel} using application. It attempts to implement the
@@ -10,13 +17,15 @@ Build status: ![.github/workflows/run-tests.yml](https://github.com/asm89/stack-
 
 ## Installation
 
-Require `asm89/stack-cors` using composer.
+Require `fruitcake/php-cors` using composer.
 
 ## Usage
 
-This package can be used as a library or as [stack middleware].
+This package can be used as a library. You can use it in your framework using:
 
-[stack middleware]: http://stackphp.com/
+ - [Stack middleware](http://stackphp.com/): https://github.com/asm89/stack-cors
+ - [Laravel](https://laravel.com): https://github.com/fruitcake/laravel-cors
+ 
 
 ### Options
 
@@ -41,7 +50,7 @@ If `['*']` is provided to _allowedMethods_, _allowedOrigins_ or _allowedHeaders_
 ```php
 <?php
 
-use Asm89\Stack\CorsService;
+use Fruitcake\Cors\CorsService;
 
 $cors = new CorsService([
     'allowedHeaders'         => ['x-allowed-header', 'x-other-allowed-header'],
@@ -65,7 +74,7 @@ $cors->isPreflightRequest(Request $request);
 ```php
 <?php
 
-use Asm89\Stack\Cors;
+use Fruitcake\Cors\Cors;
 
 $app = new Cors($app, [
     // you can use ['*'] to allow any headers
@@ -81,3 +90,9 @@ $app = new Cors($app, [
     'supportsCredentials' => false,
 ]);
 ```
+
+## License
+
+Released under the MIT License, see [LICENSE](LICENSE).
+The original author of this Library is Alexander <iam.asm89@gmail.com>, while Barry <barryvdh@gmail.com> has been involved since 2015.
+This package is split-off from https://github.com/asm89/stack-cors

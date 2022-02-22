@@ -1,18 +1,18 @@
 <?php
 
 /*
- * This file is part of asm89/stack-cors.
+ * This file is part of fruitcake/php-cors and was originally part of asm89/stack-cors
  *
  * (c) Alexander <iam.asm89@gmail.com>
+ * (c) Barryvdh <barryvdh@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Asm89\Stack\Tests;
+namespace Fruitcake\Cors\Tests;
 
-use Asm89\Stack\Cors;
-use Asm89\Stack\CorsService;
+use Fruitcake\Cors\CorsService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ class CorsTest extends TestCase
      */
     public function it_does_modify_on_a_request_without_origin()
     {
-        $app                = $this->createStackedApp();
+        $app = $this->createStackedApp();
 
         $response = $app->handle(new Request());
 
@@ -564,6 +564,6 @@ class CorsTest extends TestCase
             $options
         );
 
-        return new Cors(new MockApp($responseHeaders), $passedOptions);
+        return new MockApp($responseHeaders, $passedOptions);
     }
 }
