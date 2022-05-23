@@ -105,7 +105,7 @@ class CorsService
         // Transform wildcard pattern
         if (!$this->allowAllOrigins) {
             foreach ($this->allowedOrigins as $origin) {
-                if (strpos($origin, '*') !== false) {
+                if (strpos($origin ?? '', '*') !== false) {
                     $this->allowedOriginsPatterns[] = $this->convertWildcardToPattern($origin);
                 }
             }
