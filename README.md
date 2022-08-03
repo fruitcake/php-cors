@@ -25,7 +25,7 @@ This package can be used as a library. You can use it in your framework using:
 
  - [Stack middleware](http://stackphp.com/): https://github.com/asm89/stack-cors
  - [Laravel](https://laravel.com): https://github.com/fruitcake/laravel-cors
- 
+
 
 ### Options
 
@@ -38,6 +38,7 @@ This package can be used as a library. You can use it in your framework using:
 | exposedHeaders         | Sets the Access-Control-Expose-Headers response header.    | `[]`          |
 | maxAge                 | Sets the Access-Control-Max-Age response header.           | `0`           |
 | supportsCredentials    | Sets the Access-Control-Allow-Credentials header.          | `false`       |
+| allowPrivateNetwork    | Sets the Access-Control-Allow-Private-Network header.      | `false`       |
 
 The _allowedMethods_ and _allowedHeaders_ options are case-insensitive.
 
@@ -62,6 +63,7 @@ $cors = new CorsService([
     'exposedHeaders'         => ['Content-Encoding'],
     'maxAge'                 => 0,
     'supportsCredentials'    => false,
+    'allowPrivateNetwork'    => false,
 ]);
 
 $cors->addActualRequestHeaders(Response $response, $origin);
