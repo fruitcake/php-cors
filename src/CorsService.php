@@ -225,7 +225,7 @@ class CorsService
             return false;
         }
 
-        return count($this->allowedOrigins) === 1;
+        return count($this->allowedOrigins) === 1 && in_array($request->headers->get('Origin'), $this->allowedOrigins);
     }
 
     private function configureAllowedMethods(Response $response, Request $request): void
