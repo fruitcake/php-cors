@@ -535,6 +535,44 @@ class CorsTest extends TestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
+    /**
+     * @test
+     */
+    public function itSetsAllowPrivateNetworkWhenAllowed(): void
+    {
+        $app     = $this->createStackedApp(array('allowPrivateNetwork' => true));
+        $request = $this->createValidPreflightRequest();
+        $request->headers->set('Access-Control-Request-Private-Network', 'true');
+
+        $response = $app->handle($request);
+        $this->assertTrue($response->headers->has('Access-Control-Allow-Private-Network'));
+    }
+
+    /**
+     * @test
+     */
+    public function itDoesntSetAllowPrivateNetworkWhenNotAllowed(): void
+    {
+        $app     = $this->createStackedApp(array('allowPrivateNetwork' => false));
+        $request = $this->createValidPreflightRequest();
+        $request->headers->set('Access-Control-Request-Private-Network', 'true');
+
+        $response = $app->handle($request);
+        $this->assertFalse($response->headers->has('Access-Control-Allow-Private-Network'));
+    }
+
+    /**
+     * @test
+     */
+    public function itDoesntSetAllowPrivateNetworkWhenNotRequested(): void
+    {
+        $app     = $this->createStackedApp(array('allowPrivateNetwork' => true));
+        $request = $this->createValidPreflightRequest();
+
+        $response = $app->handle($request);
+        $this->assertFalse($response->headers->has('Access-Control-Allow-Private-Network'));
+    }
+
     private function createValidActualRequest(): Request
     {
         $request  = new Request();

@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  *  'allowedOrigins'?: string[],
  *  'allowedOriginsPatterns'?: string[],
  *  'supportsCredentials'?: bool,
+ *  'allowPrivateNetwork'? : bool,
  *  'allowedHeaders'?: string[],
  *  'allowedMethods'?: string[],
  *  'exposedHeaders'?: string[]|false,
@@ -28,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  *  'allowed_origins'?: string[],
  *  'allowed_origins_patterns'?: string[],
  *  'supports_credentials'?: bool,
+ *  'allow_private_network'? : bool,
  *  'allowed_headers'?: string[],
  *  'allowed_methods'?: string[],
  *  'exposed_headers'?: string[]|false,
@@ -48,6 +50,7 @@ class CorsService
     /** @var string[] */
     private array $exposedHeaders = [];
     private bool $supportsCredentials = false;
+    private bool $allowPrivateNetwork = false;
     private ?int $maxAge = 0;
 
     private bool $allowAllOrigins = false;
@@ -76,6 +79,8 @@ class CorsService
         $this->allowedHeaders = $options['allowedHeaders'] ?? $options['allowed_headers'] ?? $this->allowedHeaders;
         $this->supportsCredentials =
             $options['supportsCredentials'] ?? $options['supports_credentials'] ?? $this->supportsCredentials;
+        $this->allowPrivateNetwork =
+            $options['allowPrivateNetwork'] ?? $options['allow_private_network'] ?? $this->allowPrivateNetwork;
 
         $maxAge = $this->maxAge;
         if (array_key_exists('maxAge', $options)) {
@@ -162,6 +167,8 @@ class CorsService
             $this->configureAllowedHeaders($response, $request);
 
             $this->configureMaxAge($response, $request);
+
+            $this->configurePrivateNetwork($response, $request);
         }
 
         return $response;
@@ -255,6 +262,13 @@ class CorsService
     {
         if ($this->supportsCredentials) {
             $response->headers->set('Access-Control-Allow-Credentials', 'true');
+        }
+    }
+
+    private function configurePrivateNetwork(Response $response, Request $request): void
+    {
+        if ($request->headers->get('Access-Control-Request-Private-Network') === 'true' && $this->allowPrivateNetwork) {
+            $response->headers->set('Access-Control-Allow-Private-Network', 'true');
         }
     }
 

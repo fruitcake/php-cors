@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  *  'allowedOrigins': string[],
  *  'allowedOriginsPatterns': string[],
  *  'supportsCredentials': bool,
+ *  'allowPrivateNetwork' : bool,
  *  'allowedHeaders': string[],
  *  'allowedMethods': string[],
  *  'exposedHeaders': string[],
@@ -44,6 +45,7 @@ class CorsServiceTest extends TestCase
             'allowedMethods' => ['PUT'],
             'maxAge' => 684,
             'supportsCredentials' => true,
+            'allowPrivateNetwork' => true,
             'exposedHeaders' => ['x-custom-2'],
         ];
 
@@ -59,6 +61,7 @@ class CorsServiceTest extends TestCase
         $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
         $this->assertEquals($options['maxAge'], $normalized['maxAge']);
         $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['allowPrivateNetwork'], $normalized['allowPrivateNetwork']);
         $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
     }
 
@@ -80,6 +83,7 @@ class CorsServiceTest extends TestCase
             'allowedMethods' => ['PUT'],
             'maxAge' => 684,
             'supportsCredentials' => true,
+            'allowPrivateNetwork' => true,
             'exposedHeaders' => ['x-custom-2'],
         ];
 
@@ -93,6 +97,7 @@ class CorsServiceTest extends TestCase
         $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
         $this->assertEquals($options['maxAge'], $normalized['maxAge']);
         $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['allowPrivateNetwork'], $normalized['allowPrivateNetwork']);
         $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
     }
 
@@ -115,6 +120,7 @@ class CorsServiceTest extends TestCase
             'allowedMethods' => ['PUT'],
             'maxAge' => 684,
             'supportsCredentials' => true,
+            'allowPrivateNetwork' => true,
             'exposedHeaders' => ['x-custom-2'],
         ];
 
@@ -128,6 +134,7 @@ class CorsServiceTest extends TestCase
         $this->assertEquals($options['allowedMethods'], $normalized['allowedMethods']);
         $this->assertEquals($options['maxAge'], $normalized['maxAge']);
         $this->assertEquals($options['supportsCredentials'], $normalized['supportsCredentials']);
+        $this->assertEquals($options['allowPrivateNetwork'], $normalized['allowPrivateNetwork']);
         $this->assertEquals($options['exposedHeaders'], $normalized['exposedHeaders']);
     }
 
@@ -148,6 +155,7 @@ class CorsServiceTest extends TestCase
         $this->assertEquals([], $normalized['exposedHeaders']);
         $this->assertEquals(0, $normalized['maxAge']);
         $this->assertEquals(false, $normalized['supportsCredentials']);
+        $this->assertEquals(false, $normalized['allowPrivateNetwork']);
     }
 
     /**
@@ -167,6 +175,7 @@ class CorsServiceTest extends TestCase
         $this->assertEquals([], $normalized['exposedHeaders']);
         $this->assertEquals(0, $normalized['maxAge']);
         $this->assertEquals(false, $normalized['supportsCredentials']);
+        $this->assertEquals(false, $normalized['allowPrivateNetwork']);
     }
 
     /**
@@ -275,6 +284,7 @@ class CorsServiceTest extends TestCase
             'allowed_methods' => ['PUT'],
             'max_age' => 684,
             'supports_credentials' => true,
+            'allow_private_network' => true,
             'exposed_headers' => ['x-custom-2'],
         ];
 
@@ -293,6 +303,10 @@ class CorsServiceTest extends TestCase
         $this->assertEquals(
             $options['supports_credentials'],
             $this->getOptionsFromService($service)['supportsCredentials']
+        );
+        $this->assertEquals(
+            $options['allow_private_network'],
+            $this->getOptionsFromService($service)['allowPrivateNetwork']
         );
     }
 
