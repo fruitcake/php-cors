@@ -213,9 +213,8 @@ class CorsService
             // For dynamic headers, set the requested Origin header when set and allowed
             if ($this->isCorsRequest($request) && $this->isOriginAllowed($request)) {
                 $response->headers->set('Access-Control-Allow-Origin', (string) $request->headers->get('Origin'));
+                $this->varyHeader($response, 'Origin');
             }
-
-            $this->varyHeader($response, 'Origin');
         }
     }
 

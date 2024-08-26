@@ -535,6 +535,21 @@ class CorsTest extends TestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
+    /**
+     * @test
+     */
+    public function itNormalRequestShouldNotAlwaysResponseWithVary(): void
+    {
+        $app = $this->createStackedApp(array('allowedOrigins' => array('*'), 'supportsCredentials'=> true));
+        $unmodifiedResponse = new Response();
+
+        $request  = new Request();
+        $request->headers->set('Host', 'foo.com');
+        $response = $app->handle($request);
+
+        $this->assertEquals(null, $response->headers->get('Vary'));
+    }
+
     private function createValidActualRequest(): Request
     {
         $request  = new Request();
@@ -566,4 +581,6 @@ class CorsTest extends TestCase
 
         return new MockApp($responseHeaders, $options);
     }
+
+   
 }
