@@ -535,6 +535,43 @@ class CorsTest extends TestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
+    /**
+     * @test
+     */
+    public function itConfiguresExposedHeadersWhenResponseHasNoExistingHeaders(): void
+    {
+        $app = $this->createStackedApp([], [
+            'Access-Control-Expose-Headers' => 'X-Custom-1, X-Custom-2',
+        ]);
+        $request = $this->createValidActualRequest();
+
+        $response = $app->handle($request);
+
+        $this->assertTrue($response->headers->has('Access-Control-Expose-Headers'));
+        $this->assertEquals('X-Custom-1, X-Custom-2', $response->headers->get('Access-Control-Expose-Headers'));
+    }
+
+    /**
+     * @test
+     */
+    public function itMergesExposedHeadersWhenResponseHasExistingHeaders(): void
+    {
+        $app = $this->createStackedApp(
+            [
+                'exposedHeaders' => ['X-Option-1', 'X-Option-2'],
+            ],
+            [
+                'Access-Control-Expose-Headers' => 'X-Custom-1',
+            ]
+        );
+        $request = $this->createValidActualRequest();
+
+        $result = $app->handle($request);
+
+        $this->assertTrue($result->headers->has('Access-Control-Expose-Headers'));
+        $this->assertEquals('X-Option-1, X-Option-2, X-Custom-1', $result->headers->get('Access-Control-Expose-Headers'));
+    }
+
     private function createValidActualRequest(): Request
     {
         $request  = new Request();
