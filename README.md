@@ -5,7 +5,7 @@
 [![Code Coverage](https://img.shields.io/badge/CodeCoverage-100%25-brightgreen)](https://github.com/fruitcake/php-cors/actions/workflows/run-coverage.yml)
 [![Packagist License](https://img.shields.io/badge/Licence-MIT-blue)](http://choosealicense.com/licenses/mit/)
 [![Latest Stable Version](https://img.shields.io/packagist/v/fruitcake/php-cors?label=Stable)](https://packagist.org/packages/fruitcake/php-cors)
-[![Total Downloads](https://img.shields.io/packagist/dt/fruitcake/php-cors?label=Downloads)](https://packagist.org/packages/fruitcake/php-corsr)
+[![Total Downloads](https://img.shields.io/packagist/dt/fruitcake/php-cors?label=Downloads)](https://packagist.org/packages/fruitcake/php-cors)
 [![Fruitcake](https://img.shields.io/badge/Powered%20By-Fruitcake-b2bc35.svg)](https://fruitcake.nl/)
 
 Library and middleware enabling cross-origin resource sharing for your
