@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MockApp
 {
-    /** @var string[] */
+    /** @var array<array<string>|string> */
     private $responseHeaders;
 
     /**
@@ -30,7 +30,7 @@ class MockApp
     private $cors;
 
     /**
-     * @param string[] $responseHeaders
+     * @param array<array<string>|string> $responseHeaders
      * @param CorsInputOptions $options
      */
     public function __construct(array $responseHeaders, array $options = [])

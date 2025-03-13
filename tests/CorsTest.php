@@ -276,6 +276,32 @@ class CorsTest extends TestCase
 
     /**
      * @test
+     * @see http://www.w3.org/TR/cors/index.html#resource-implementation
+     */
+    public function itAppendsMultipleExistingVaryHeaders(): void
+    {
+        $app      = $this->createStackedApp(
+            array(
+                'allowedOrigins' => ['*'],
+                'supportsCredentials' => true,
+            ),
+            array(
+                'Vary' => [
+                    'Content-Type',
+                    'Referer',
+                ],
+            )
+        );
+        $request  = $this->createValidActualRequest();
+
+        $response = $app->handle($request);
+
+        $this->assertCount(3, $response->headers->all('Vary'));
+        $this->assertEquals(['Content-Type', 'Referer', 'Origin'], $response->headers->all('Vary'));
+    }
+
+    /**
+     * @test
      */
     public function itReturnsAccessControlHeadersOnCorsRequest(): void
     {
@@ -555,7 +581,7 @@ class CorsTest extends TestCase
 
     /**
      * @param CorsInputOptions $options
-     * @param string[] $responseHeaders
+     * @param array<array<string>|string> $responseHeaders
      * @return MockApp
      */
     private function createStackedApp(array $options = array(), array $responseHeaders = array()): MockApp
