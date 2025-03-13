@@ -262,7 +262,6 @@ class CorsServiceTest extends TestCase
         ];
 
         $service = new CorsService($options);
-        $this->assertInstanceOf(CorsService::class, $service);
 
         $this->assertEquals($options['allowed_origins'], $this->getOptionsFromService($service)['allowedOrigins']);
         $this->assertEquals(
