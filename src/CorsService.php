@@ -280,9 +280,9 @@ class CorsService
             $varyHeaders = $response->getVary();
             if (!in_array($header, $varyHeaders, true)) {
                 if (count($response->headers->all('Vary')) === 1) {
-                    $response->headers->set('Vary', ((string)$response->headers->get('Vary')) . ', ' . $header);
+                    $response->setVary(((string)$response->headers->get('Vary')) . ', ' . $header);
                 } else {
-                    $response->headers->set('Vary', $header, false);
+                    $response->setVary($header, false);
                 }
             }
         }
