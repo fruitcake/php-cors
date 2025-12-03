@@ -18,7 +18,7 @@ jobs:
         os: [ubuntu-latest]
         exclude:
           # Symfony 7+ requires PHP 8.2+; see https://symfony.com/releases/7.4
-          - symfony: ^7.4
+          - symfony: ^7.3
             php: 8.1
           # Symfony 8+ requires PHP 8.4+; see https://symfony.com/releases/8.0
           - symfony: ^8.0
