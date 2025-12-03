@@ -290,7 +290,6 @@ class CorsServiceTest extends TestCase
 
         $options = [];
         foreach ($properties as $property) {
-            $property->setAccessible(true);
             $options[$property->getName()] = $property->getValue($service);
         }
 
