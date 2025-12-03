@@ -12,28 +12,15 @@ jobs:
 
     strategy:
       matrix:
-        php: [7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5]
-        symfony: [^4.4, ^5.4, ^6.4, ^7.4, ^8.0]
+        php: [8.1, 8.2, 8.3, 8.4, 8.5]
+        symfony: [^6.4, ^7.3, ^8.0]
         dependency-version: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
         exclude:
-          # Symfony 6+ requires PHP 8.1+; see https://symfony.com/releases/6.4
-          - symfony: ^6.4
-            php: 7.4
-          - symfony: ^6.4
-            php: 8.0
           # Symfony 7+ requires PHP 8.2+; see https://symfony.com/releases/7.4
-          - symfony: ^7.4
-            php: 7.4
-          - symfony: ^7.4
-            php: 8.0
           - symfony: ^7.4
             php: 8.1
           # Symfony 8+ requires PHP 8.4+; see https://symfony.com/releases/8.0
-          - symfony: ^8.0
-            php: 7.4
-          - symfony: ^8.0
-            php: 8.0
           - symfony: ^8.0
             php: 8.1
           - symfony: ^8.0
