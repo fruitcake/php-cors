@@ -290,7 +290,10 @@ class CorsServiceTest extends TestCase
 
         $options = [];
         foreach ($properties as $property) {
-            $property->setAccessible(true);
+            if (\PHP_VERSION_ID < 80100) {
+                // This method is no-op starting from PHP 8.1; see also https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_reflectionsetaccessible
+                $property->setAccessible(true);
+            }
             $options[$property->getName()] = $property->getValue($service);
         }
 
