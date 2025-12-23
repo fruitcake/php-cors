@@ -56,5 +56,5 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.symfony != '^4.4'
 
     - name: Check PSR-12 Codestyle
-      run: composer test
+      run: composer check-style
       if: matrix.os == 'ubuntu-latest'
