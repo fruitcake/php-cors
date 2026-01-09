@@ -260,8 +260,17 @@ class CorsService
 
     private function configureExposedHeaders(Response $response, Request $request): void
     {
+        $existingExposedHeaders = $response->headers->get('Access-Control-Expose-Headers');
+        $exposedHeaders = $existingExposedHeaders ? array_map('trim', explode(',', $existingExposedHeaders)) : [];
+
         if ($this->exposedHeaders) {
-            $response->headers->set('Access-Control-Expose-Headers', implode(', ', $this->exposedHeaders));
+            $exposedHeaders = array_merge($this->exposedHeaders, $exposedHeaders);
+        }
+
+        $uniqueExposedHeaders = array_unique(array_filter($exposedHeaders));
+
+        if (!empty($uniqueExposedHeaders)) {
+            $response->headers->set('Access-Control-Expose-Headers', implode(', ', $uniqueExposedHeaders));
         }
     }
 
